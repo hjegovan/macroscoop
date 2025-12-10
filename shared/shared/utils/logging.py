@@ -1,7 +1,7 @@
 import logging
 import json
 from typing import override
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 
@@ -19,12 +19,12 @@ class JsonLogFormatter(logging.Formatter):
         base_fields = {
             "message": record.getMessage(),
             "timestamp": datetime.fromtimestamp(record.created,
-                                                tz=datetime.timetz.utc).isoformat(),
+                                                tz=timezone.utc).isoformat(),
         }
         if record.exc_info is not None:
             base_fields["exc_info"]= self.formatException(record.exc_info)
         if record.stack_info is not None:
-            base_fields["stack_info"]= self.formatException(record.stack_info)
+            base_fields["stack_info"]= self.formatStack(record.stack_info)
         message={
             key: msg_val
             if (msg_val := base_fields.pop(val,None)) is not None

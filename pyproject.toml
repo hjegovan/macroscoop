@@ -4,11 +4,19 @@ version = "0.1.0"
 description = "Macroscoop data platform"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
 
+
+dependencies = [
+    "macroscoop-shared",
+#    "macroscoop-ingestion",
+]
+
+[tool.uv.sources]
+macroscoop-shared = { workspace = true }
+#macroscoop-ingestion = { workspace = true }
 
 [tool.uv.workspace]
 members = [
+    "shared",
     "src/ingestion",
-    "shared"
 ]
