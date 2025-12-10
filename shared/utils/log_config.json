@@ -1,0 +1,42 @@
+{
+    "version":1,
+    "disable_existing_loggers":false,
+    "formatter":{
+        "simple":{
+            "formate":"%(levelname)s: %(message)s"
+        },
+        "detailed":{
+            "formate":"%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "datefmt":"%Y-%m-%d %H:%M:%Sz"
+        }
+    },
+    "json":{
+        "fmt_keys":{
+            "()":"logging.JsonLogFormatter",
+            "level":"levelname",
+            "message":"message",
+            "timestamp":"timestamp",
+            "logger":"name",
+            "module":"module",
+            "function":"function",
+            "line":"lineo",
+            "thread_name":"threadName"
+        }
+        },
+    "handlers":{
+        "stdout":{
+            "class":"logging.handlers.RotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "json",
+            "filename": "data/logs/app.log",
+            "maxBytes": 100000,
+            "backupCount": 3
+        }
+    },
+    "loggers":{
+        "root": {"level":"DEBUG",
+                 "handlers":["stdout"]
+                }
+    }
+        
+}

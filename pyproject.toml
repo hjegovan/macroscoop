@@ -1,7 +1,14 @@
 [project]
 name = "macroscoop"
 version = "0.1.0"
-description = "Add your description here"
+description = "Macroscoop data platform"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
+
+
+[tool.uv.workspace]
+members = [
+    "src/ingestion",
+    "shared"
+]

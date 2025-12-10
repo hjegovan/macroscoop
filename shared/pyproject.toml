@@ -1,0 +1,10 @@
+[project]
+name = "macroscoop-shared"
+version = "0.1.0"
+description = "Shared utilities for macroscoop"
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
