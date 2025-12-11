@@ -3,11 +3,14 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any, List
 from datetime import datetime
-from pathlib import Path
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+from time import sleep
+from random import uniform
 
+
+from shared.utils.helper import project_path
 from shared.utils.log_setup import setup_logging
 
 # ==============================================================================
@@ -38,7 +41,9 @@ class BaseSource(ABC):
             'session_start': None,
             'session_end': None,
         }
-        
+    
+    def _rate_limit_delay(self):
+        return sleep(uniform(2, 3))
         
     def _track_error(self, error_type: str, message: str, context: str = ""):
         error_record = {
@@ -122,15 +127,6 @@ class BaseSource(ABC):
     # =========================================================================
     
     def collect(self, **fetch_params) -> List[Dict[str, Any]]:
-        """
-        High-level method: fetch, parse, and validate items.
-        
-        Args:
-            **fetch_params: Parameters passed to fetch()
-            
-        Returns:
-            List of validated items
-        """
         self.start_session()
         
         try:
@@ -171,6 +167,7 @@ class BaseSource(ABC):
 # LAYER 2: HTTP Source - Adds HTTP functionality to BaseSource
 # ==============================================================================
 
+
 class BaseHTTPSource(BaseSource):
     """
     Base class for HTTP-based acquisition sources.
@@ -187,7 +184,6 @@ class BaseHTTPSource(BaseSource):
         source_id: str,
         user_agent: str,
         base_url: Optional[str] = None,
-        rate_limit_delay: float = 0.1,
         max_retries: int = 3,
         retry_backoff: float = 1.0,
         timeout: int = 30,
@@ -195,27 +191,11 @@ class BaseHTTPSource(BaseSource):
         log_dir: Optional[str] = None,
         **config
     ):
-        """
-        Initialize the HTTP source.
-        
-        Args:
-            source_id: Unique identifier for this source
-            user_agent: User agent string for HTTP requests
-            base_url: Base URL for the source (optional)
-            rate_limit_delay: Minimum seconds between requests
-            max_retries: Number of retry attempts
-            retry_backoff: Exponential backoff factor
-            timeout: Default timeout in seconds
-            proxy_config: Proxy configuration (username, password, host, port)
-            log_dir: Directory for log files
-            **config: Additional configuration
-        """
         # Initialize parent BaseSource
         super().__init__(source_id, log_dir, **config)
         
         self.user_agent = user_agent
         self.base_url = base_url.rstrip('/') if base_url else None
-        self.rate_limit_delay = rate_limit_delay
         self.timeout = timeout
         self.proxy_config = proxy_config
         
@@ -287,13 +267,7 @@ class BaseHTTPSource(BaseSource):
         }
         
         self.logger.info(f"Configured proxy: {username}@{host}:{port}")
-    
-    def _enforce_rate_limit(self):
-        """Ensure minimum delay between requests."""
-        elapsed = time.time() - self._last_request_time
-        if elapsed < self.rate_limit_delay:
-            time.sleep(self.rate_limit_delay - elapsed)
-        self._last_request_time = time.time()
+
     
     def _track_http_error(self, error_type: str):
         """Track HTTP error types."""

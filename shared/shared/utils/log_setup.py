@@ -3,6 +3,8 @@ import logging.config
 import json
 from pathlib import Path
 
+from shared.utils.helper import project_path
+
 
 def setup_logging(name: str = "", config_name: str = "log_config.json") -> logging.Logger:
     """
@@ -13,13 +15,12 @@ def setup_logging(name: str = "", config_name: str = "log_config.json") -> loggi
     """
     if name == "":
         name = __name__
-    current_file = Path(__file__).resolve()
-    project_root = current_file.parent.parent.parent
     
-    log_dir = project_root / "shared" / "data" / "logs"
+    log_dir = project_path(["shared","shared","data","logs"])
+    print(log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)
     
-    config_path = project_root / "shared" / "config" / config_name
+    config_path = project_path(["shared","shared","config",config_name])
     
     if not config_path.exists():
         raise FileNotFoundError(f"Logging config not found: {config_path}")
@@ -27,7 +28,7 @@ def setup_logging(name: str = "", config_name: str = "log_config.json") -> loggi
     with open(config_path, "r") as f:
         config = json.load(f)
         x = config['handlers']['file']['filename']
-        config['handlers']['file']['filename'] = project_root / "shared" / x
+        config['handlers']['file']['filename'] = project_path(["shared","shared",x])
     
     # Apply configuration
     logging.config.dictConfig(config)
