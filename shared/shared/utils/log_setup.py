@@ -26,6 +26,8 @@ def setup_logging(name: str = "", config_name: str = "log_config.json") -> loggi
     
     with open(config_path, "r") as f:
         config = json.load(f)
+        x = config['handlers']['file']['filename']
+        config['handlers']['file']['filename'] = project_root / "shared" / x
     
     # Apply configuration
     logging.config.dictConfig(config)
