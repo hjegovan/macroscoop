@@ -34,7 +34,7 @@
             "class": "logging.handlers.RotatingFileHandler",
             "level": "DEBUG",
             "formatter": "json",
-            "filename": "config/log_config.json",
+            "filename": "data/logs/app.jsonl",
             "maxBytes": 10485760,
             "backupCount": 5
         }
@@ -48,10 +48,4 @@
             ]
         }
     }
-}{"level": "INFO", "message": "Ingestion service starting...", "timestamp": "2025-12-11T00:01:05.682960+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 7, "thread_name": "MainThread"}
-{"level": "DEBUG", "message": "Debug message - detailed info", "timestamp": "2025-12-11T00:01:05.683789+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 11, "thread_name": "MainThread"}
-{"level": "INFO", "message": "Info message - general info", "timestamp": "2025-12-11T00:01:05.683912+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 12, "thread_name": "MainThread"}
-{"level": "WARNING", "message": "Warning message - something to watch", "timestamp": "2025-12-11T00:01:05.684050+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 13, "thread_name": "MainThread"}
-{"level": "INFO", "message": "Processed 100 records", "timestamp": "2025-12-11T00:01:05.684171+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 17, "thread_name": "MainThread"}
-{"level": "ERROR", "message": "Division by zero occurred", "timestamp": "2025-12-11T00:01:05.684310+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 23, "thread_name": "MainThread", "exc_info": "Traceback (most recent call last):\n  File \"/Users/harryG/Desktop/code/2025/macroscoop/src/ingestion/main.py\", line 21, in main\n    result = 10 / 0\n             ~~~^~~\nZeroDivisionError: division by zero"}
-{"level": "INFO", "message": "Ingestion completed successfully", "timestamp": "2025-12-11T00:01:05.694392+00:00", "logger": "shared.utils.log_setup", "module": "main", "function": "main", "line": 25, "thread_name": "MainThread"}
+}
